@@ -1,7 +1,7 @@
 // src/app/api/wordpress/publish/route.ts
 
 import { NextResponse } from 'next/server';
-import { supabaseAdmin }  from '../../../../lib/supabaseAdmin';
+import { getSupabaseAdmin }  from '../../../../lib/supabaseAdmin';
 import { decrypt }         from '../../../../utils/encryption';
 
 export const runtime = 'nodejs';
@@ -18,6 +18,7 @@ export async function POST(req: Request) {
   }
 
   // 2) Fetch stored WP credentials
+  const supabaseAdmin = getSupabaseAdmin();
   const { data: account, error } = await supabaseAdmin
     .from('wp_accounts')
     .select('site_url, username, encrypted_password, footer_html')

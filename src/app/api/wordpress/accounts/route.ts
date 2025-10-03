@@ -1,7 +1,7 @@
 // src/app/api/wordpress/accounts/route.ts
 
 import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '../../../../lib/supabaseAdmin';
+import { getSupabaseAdmin } from '../../../../lib/supabaseAdmin';
 
 export const runtime = 'edge';
 
@@ -10,6 +10,7 @@ export async function GET(request: Request) {
   if (!userId) {
     return NextResponse.json({ error: 'Missing userId' }, { status: 400 });
   }
+  const supabaseAdmin = getSupabaseAdmin();
   const { data, error } = await supabaseAdmin
     .from('wp_accounts')
     .select('id, site_url, username')

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getOpenAI } from '../../../lib/openai';
-import { supabaseAdmin } from '../../../lib/supabaseAdmin';
+import { getSupabaseAdmin } from '../../../lib/supabaseAdmin';
 import {
   buildProfileHeadlineQuery,
   getProfileQuotaTotal,
@@ -94,6 +94,7 @@ export async function GET(request: NextRequest) {
     return jsonError('Invalid userId format');
   }
 
+  const supabaseAdmin = getSupabaseAdmin();
   const { data, error } = await supabaseAdmin
     .from('site_profiles')
     .select('site_url, raw_text, profile')
@@ -127,7 +128,7 @@ export async function GET(request: NextRequest) {
 }
 
 type ProfilesDependencies = {
-  supabaseAdmin: typeof supabaseAdmin;
+  supabaseAdmin: ReturnType<typeof getSupabaseAdmin>;
   extractProfile: typeof extractProfile;
   normalizeSiteUrl: typeof normalizeSiteUrl;
   normalizeProfile: typeof normalizeProfile;
@@ -139,7 +140,7 @@ function createProfilesPostHandler(
   overrides: Partial<ProfilesDependencies> = {}
 ) {
   const {
-    supabaseAdmin: supabaseClient = supabaseAdmin,
+    supabaseAdmin: supabaseClient = getSupabaseAdmin(),
     extractProfile: profileExtractor = extractProfile,
     normalizeSiteUrl: siteUrlNormalizer = normalizeSiteUrl,
     normalizeProfile: profileNormalizer = normalizeProfile,
