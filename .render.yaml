@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: ai-blog-generator
+    env: node
+    plan: free
+    branch: main
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: SERPAPI_KEY
+        sync: false
+      - key: NEWSAPI_API_KEY
+        sync: false
+      - key: WORDPRESS_SITE_URL
+        sync: false
+      - key: WORDPRESS_USERNAME
+        sync: false
+      - key: WORDPRESS_APP_PASSWORD
+        sync: false
