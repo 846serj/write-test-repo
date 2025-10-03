@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSupabaseAdmin } from '../../../../lib/supabaseAdmin';
+import { supabaseAdmin } from '../../../../lib/supabaseAdmin';
 import { decrypt } from '../../../../utils/encryption';
 
 export const runtime = 'nodejs';
@@ -27,7 +27,6 @@ async function handleRequest(req: NextRequest, method: string) {
 
     // 1. If accountId & userId are provided, retrieve credentials from DB and construct Basic auth
     if (accountId && userId) {
-      const supabaseAdmin = getSupabaseAdmin();
       const { data: account, error } = await supabaseAdmin
         .from('wp_accounts')
         .select('site_url, username, encrypted_password, footer_html')

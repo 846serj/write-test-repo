@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getSupabaseAdmin } from '../../../../lib/supabaseAdmin';
+import { supabaseAdmin } from '../../../../lib/supabaseAdmin';
 
 export const runtime = 'edge';
 
@@ -10,7 +10,6 @@ export async function GET(req: Request) {
   if (!userId || !accountId) {
     return NextResponse.json({ error: 'Missing userId or accountId' }, { status: 400 });
   }
-  const supabaseAdmin = getSupabaseAdmin();
   const { data, error } = await supabaseAdmin
     .from('wp_accounts')
     .select('footer_html')
@@ -28,7 +27,6 @@ export async function POST(req: Request) {
   if (!userId || !accountId) {
     return NextResponse.json({ error: 'Missing userId or accountId' }, { status: 400 });
   }
-  const supabaseAdmin = getSupabaseAdmin();
   const { error } = await supabaseAdmin
     .from('wp_accounts')
     .update({ footer_html })

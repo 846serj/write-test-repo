@@ -1,7 +1,7 @@
 // src/app/api/wordpress/add-account/route.ts
 
 import { NextResponse } from 'next/server';
-import { getSupabaseAdmin } from '../../../../lib/supabaseAdmin';
+import { supabaseAdmin } from '../../../../lib/supabaseAdmin';
 import { encrypt } from '../../../../utils/encryption';
 
 export const runtime = 'edge';
@@ -38,7 +38,6 @@ export async function POST(request: Request) {
     const encrypted = encrypt(password);
 
     // Store in Supabase
-    const supabaseAdmin = getSupabaseAdmin();
     const { error } = await supabaseAdmin
       .from('wp_accounts')
       .insert({

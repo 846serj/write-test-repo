@@ -1,11 +1,16 @@
 // src/app/api/wordpress/publish/route.ts
 
 import { NextResponse } from 'next/server';
-import { getSupabaseAdmin }  from '../../../../lib/supabaseAdmin';
 import { decrypt }         from '../../../../utils/encryption';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+
+// Lazy import to avoid build-time execution
+async function getSupabaseAdmin() {
+  const { supabaseAdmin } = await import('../../../../lib/supabaseAdmin');
+  return supabaseAdmin;
+}
 
 export async function POST(req: Request) {
   // 1) Pull accountId, title & content from the request body
@@ -18,7 +23,7 @@ export async function POST(req: Request) {
   }
 
   // 2) Fetch stored WP credentials
-  const supabaseAdmin = getSupabaseAdmin();
+  const supabaseAdmin = await getSupabaseAdmin();
   const { data: account, error } = await supabaseAdmin
     .from('wp_accounts')
     .select('site_url, username, encrypted_password, footer_html')
